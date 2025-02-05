@@ -8,23 +8,14 @@ def show_login(role, root):
         username = username_entry.get()
         password = password_entry.get()
 
-        # Debug print statements
-        print(f"Username entered: {username}")
-        print(f"Password entered: {password}")
-
         result = authenticate(username, password)
-
-        # Debug print statement
-        print(f"Authentication result: {result}")
 
         error_msg.set(result["message"])
 
         if result["success"]:
-            print("Login successful")
             messagebox.showinfo("Success", result["message"])
             open_dashboard(role)
         else:
-            print("Login failed")
             error_msg.set(result["message"])
 
     def open_dashboard(role):
