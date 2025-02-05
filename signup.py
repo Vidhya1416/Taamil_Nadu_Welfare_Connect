@@ -1,8 +1,8 @@
 import tkinter as tk
 from tkinter import messagebox
 import re
-from utils import set_background  # Import set_background from utils
-from database import add_user  # Import add_user function
+from utils import set_background
+from database import add_user, get_user  # Import get_user function
 
 def show_signup(role, root):
     from role_selection import open_role_selection
@@ -30,9 +30,30 @@ def show_signup(role, root):
             error_msg.set("Passwords do not match")
             return
 
+        # Check if the user already exists in the database
+        existing_user = get_user(username)
+        print(f"Existing user: {existing_user}")  # Debug statement
+        if existing_user:
+            error_msg.set("Account already exists. Redirecting to login.")
+            root.after(2000, lambda: show_login(role, root))
+            return
+
         # Add user to the database
         add_user(username, password)
         messagebox.showinfo("Success", f"Account successfully created for {role}")
+        root.after(2000, lambda: open_dashboard(role, root))  # Redirect to dashboard
+
+    def open_dashboard(role, root):
+        for widget in root.winfo_children():
+            widget.destroy()
+
+        set_background(root)
+
+        dashboard_label = tk.Label(root, text=f"{role} Dashboard", font=("Helvetica", 20))
+        dashboard_label.pack(pady=20)
+
+        welcome_message = tk.Label(root, text=f"Welcome, {username_entry.get()}!", font=("Helvetica", 16))
+        welcome_message.pack(pady=10)
 
     for widget in root.winfo_children():
         widget.destroy()
@@ -79,3 +100,7 @@ def show_signup(role, root):
     back_arrow = tk.Label(root, text="←", font=("Helvetica", 24), cursor="hand2", fg="blue", bg="white")
     back_arrow.bind("<Button-1>", lambda e: open_role_selection(root))
     back_arrow.place(x=10, y=10)
+
+def show_login(role, root):
+    from login import show_login  # Import the login function
+    show_login(role, root)
