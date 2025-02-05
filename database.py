@@ -42,7 +42,7 @@ def get_user(username):
     try:
         cursor.execute('SELECT username, password FROM users WHERE username=%s', (username,))
         user = cursor.fetchone()
-        print(f"User retrieved: {user}")
+        print(f"User retrieved: {user}")  # Debug statement
         return user
     except mysql.connector.Error as err:
         print(f"Error: {err}")
