@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox
 from utils import set_background
-from auth import authenticate  # Import the authenticate function
+from auth import authenticate
 
 def show_login(role, root):
     def handle_login():
@@ -30,6 +30,14 @@ def show_login(role, root):
         welcome_message = tk.Label(root, text=f"Welcome, {username_entry.get()}!", font=("Helvetica", 16))
         welcome_message.pack(pady=10)
 
+    def toggle_password_visibility(entry, button):
+        if entry.cget('show') == '':
+            entry.config(show='*')
+            button.config(text='👁️')
+        else:
+            entry.config(show='')
+            button.config(text='🙈')
+
     from role_selection import open_role_selection
 
     for widget in root.winfo_children():
@@ -51,15 +59,16 @@ def show_login(role, root):
 
     username_label = tk.Label(form_frame, text="Username:", width=15, anchor='e')
     username_entry = tk.Entry(form_frame, width=30)
-
     username_label.grid(row=0, column=0, padx=5, pady=5)
     username_entry.grid(row=0, column=1, padx=5, pady=5)
 
     password_label = tk.Label(form_frame, text="Password:", width=15, anchor='e')
     password_entry = tk.Entry(form_frame, show="*", width=30)
-
     password_label.grid(row=1, column=0, padx=5, pady=5)
     password_entry.grid(row=1, column=1, padx=5, pady=5)
+
+    toggle_password_button = tk.Button(form_frame, text="👁️", command=lambda: toggle_password_visibility(password_entry, toggle_password_button))
+    toggle_password_button.grid(row=1, column=2, padx=5, pady=5)
 
     error_msg = tk.StringVar()
     error_label = tk.Label(center_frame, textvariable=error_msg, fg="red")
