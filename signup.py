@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 import re
 from utils import set_background
-from database import add_user, get_user  # Import get_user function
+from database import add_user, get_user
 
 def show_signup(role, root):
     from role_selection import open_role_selection
@@ -30,18 +30,16 @@ def show_signup(role, root):
             error_msg.set("Passwords do not match")
             return
 
-        # Check if the user already exists in the database
         existing_user = get_user(username)
-        print(f"Existing user: {existing_user}")  # Debug statement
+        print(f"Existing user: {existing_user}")
         if existing_user:
             error_msg.set("Account already exists. Redirecting to login.")
             root.after(2000, lambda: show_login(role, root))
             return
 
-        # Add user to the database
         add_user(username, password)
         messagebox.showinfo("Success", f"Account successfully created for {role}")
-        root.after(2000, lambda: open_dashboard(role, root))  # Redirect to dashboard
+        root.after(2000, lambda: open_dashboard(role, root))
 
     def open_dashboard(role, root):
         for widget in root.winfo_children():
@@ -54,6 +52,14 @@ def show_signup(role, root):
 
         welcome_message = tk.Label(root, text=f"Welcome, {username_entry.get()}!", font=("Helvetica", 16))
         welcome_message.pack(pady=10)
+
+    def toggle_password_visibility(entry, button):
+        if entry.cget('show') == '':
+            entry.config(show='*')
+            button.config(text='👁️')
+        else:
+            entry.config(show='')
+            button.config(text='🙈')
 
     for widget in root.winfo_children():
         widget.destroy()
@@ -74,21 +80,24 @@ def show_signup(role, root):
 
     username_label = tk.Label(form_frame, text="Username:", width=15, anchor='e')
     username_entry = tk.Entry(form_frame, width=30)
-
     username_label.grid(row=0, column=0, padx=5, pady=5)
     username_entry.grid(row=0, column=1, padx=5, pady=5)
 
     password_label = tk.Label(form_frame, text="Password:", width=15, anchor='e')
     password_entry = tk.Entry(form_frame, show="*", width=30)
-
     password_label.grid(row=1, column=0, padx=5, pady=5)
     password_entry.grid(row=1, column=1, padx=5, pady=5)
 
+    toggle_password_button = tk.Button(form_frame, text="👁️", command=lambda: toggle_password_visibility(password_entry, toggle_password_button))
+    toggle_password_button.grid(row=1, column=2, padx=5, pady=5)
+
     confirm_password_label = tk.Label(form_frame, text="Confirm Password:", width=15, anchor='e')
     confirm_password_entry = tk.Entry(form_frame, show="*", width=30)
-
     confirm_password_label.grid(row=2, column=0, padx=5, pady=5)
     confirm_password_entry.grid(row=2, column=1, padx=5, pady=5)
+
+    toggle_confirm_password_button = tk.Button(form_frame, text="👁️", command=lambda: toggle_password_visibility(confirm_password_entry, toggle_confirm_password_button))
+    toggle_confirm_password_button.grid(row=2, column=2, padx=5, pady=5)
 
     error_msg = tk.StringVar()
     error_label = tk.Label(center_frame, textvariable=error_msg, fg="red")
@@ -102,5 +111,5 @@ def show_signup(role, root):
     back_arrow.place(x=10, y=10)
 
 def show_login(role, root):
-    from login import show_login  # Import the login function
+    from login import show_login
     show_login(role, root)
