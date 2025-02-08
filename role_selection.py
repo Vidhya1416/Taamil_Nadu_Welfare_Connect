@@ -12,10 +12,14 @@ def open_login_signup(role, root):
     tk.Label(root, text=f"{role} Login/Signup", font=("Helvetica", 16)).pack(pady=20)
 
     from login import show_login  # Import inside function to avoid circular import
-    from signup import show_signup  # Import inside function to avoid circular import
+    if role.lower() != "admin":
+        from signup import show_signup  # Import inside function to avoid circular import
 
     tk.Button(root, text="Login", command=lambda: show_login(role, root)).pack(pady=10)
-    tk.Button(root, text="Signup", command=lambda: show_signup(role, root)).pack(pady=10)
+
+    if role.lower() != "admin":
+        tk.Button(root, text="Signup", command=lambda: show_signup(role, root)).pack(pady=10)
+
     tk.Button(root, text="Back to Role Selection", command=lambda: open_role_selection(root)).pack(pady=10)
 
 def animate_button(button):
@@ -33,10 +37,12 @@ def open_role_selection(root):
     style = ttk.Style()
     style.configure("TButton", font=("Helvetica", 12), padding=10)
 
-    welcome_label = tk.Label(root, text="Welcome to Tamil Nadu Welfare Connect", font=("Helvetica", 24, "bold"), fg="white", bg="black", padx=20, pady=10)
+    welcome_label = tk.Label(root, text="Welcome to Tamil Nadu Welfare Connect", font=("Helvetica", 24, "bold"),
+                             fg="white", bg="black", padx=20, pady=10)
     welcome_label.pack(pady=20)
 
-    instruction_label = tk.Label(root, text="Please select your role to proceed:", font=("Helvetica", 20), fg="white", bg="black", padx=20, pady=10)
+    instruction_label = tk.Label(root, text="Please select your role to proceed:", font=("Helvetica", 20), fg="white",
+                                 bg="black", padx=20, pady=10)
     instruction_label.pack(pady=10)
 
     button_frame = tk.Frame(root, bg="pink")
@@ -57,13 +63,15 @@ def open_role_selection(root):
             img_label.image = photo
             img_label.pack(pady=10)
 
-            button = tk.Button(inner_frame, text=role, command=lambda: open_login_signup(role, root), font=("Helvetica", 12),
+            button = tk.Button(inner_frame, text=role, command=lambda: open_login_signup(role, root),
+                               font=("Helvetica", 12),
                                bg="#87CEFA", activebackground="#FFA07A", relief="solid", bd=2)
             button.config(borderwidth=2, relief="solid")
             button.pack(pady=10)
             animate_button(button)
         except FileNotFoundError:
-            messagebox.showerror("File Not Found", f"Image file '{image_path}' not found. Please ensure the file is in the correct directory.")
+            messagebox.showerror("File Not Found",
+                                 f"Image file '{image_path}' not found. Please ensure the file is in the correct directory.")
 
     role_frames = [tk.Frame(button_frame, bg="black") for _ in range(3)]
     for role_frame in role_frames:
