@@ -1,14 +1,16 @@
 import tkinter as tk
 from tkinter import messagebox
 from utils import set_background
-from auth import authenticate
+from auth import authenticate  # Correctly import the authenticate function
 
 def show_login(role, root):
     def handle_login():
-        username = username_entry.get()
-        password = password_entry.get()
+        username = username_entry.get().strip()
+        password = password_entry.get().strip()
+        print(f"Attempting login with Username: '{username}', Password: '{password}'")
 
-        result = authenticate(username, password)
+        result = authenticate(username, password, role)
+        print(f"Authentication result: {result}")
 
         error_msg.set(result["message"])
 
