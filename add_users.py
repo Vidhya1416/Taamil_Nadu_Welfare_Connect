@@ -2,29 +2,33 @@ from database import add_user
 import bcrypt
 
 users = [
-    ("john_doe_123", "password!2"),
-    ("jane_smith_456", "password#3"),
-    ("alice_johnson_789", "pass4567!"),
-    ("bob_brown_1011", "myp@ssword88"),
-    ("charlie_davis_1213", "qwertyUI!2"),
-    ("david_lee_1415", "secret!2022"),
-    ("emily_clark_1617", "password$5"),
-    ("frank_white_1819", "securePass!#"),
-    ("grace_hall_2021", "letmein123!"),
-    ("hannah_king_2223", "abcdefGHI!2"),
-    ("ian_adams_2425", "superSecret90!"),
-    ("jessica_wright_2627", "hunter2#pass"),
-    ("kevin_baker_2829", "myS3curePwd!"),
-    ("laura_anderson_3031", "s3cur1tyTest$"),
-    ("michael_hill_3233", "p@$$w0rd789"),
-    ("natalie_martin_3435", "opensesame#12"),
-    ("oscar_thompson_3637", "TrickyPass@98"),
-    ("paul_garcia_3839", "welcome1@3$"),
-    ("quincy_moore_4041", "simplePass$12"),
-    ("rachel_morris_4243", "loginTest098@")
-]
+    # Students
+    ("student_john_doe", "studentPass1!", "student"),
+    ("student_jane_smith", "studentPass2@", "student"),
+    ("student_alice_johnson", "studentPass3#", "student"),
+    ("student_bob_brown", "studentPass4$", "student"),
+    ("student_charlie_davis", "studentPass5%", "student"),
+    ("student_david_lee", "studentPass6^", "student"),
+    ("student_emily_clark", "studentPass7&", "student"),
+    # Farmers
+    ("farmer_john_doe", "farmerPass1!", "farmer"),
+    ("farmer_jane_smith", "farmerPass2@", "farmer"),
+    ("farmer_alice_johnson", "farmerPass3#", "farmer"),
+    ("farmer_bob_brown", "farmerPass4$", "farmer"),
+    ("farmer_charlie_davis", "farmerPass5%", "farmer"),
+    ("farmer_david_lee", "farmerPass6^", "farmer"),
+    ("farmer_emily_clark", "farmerPass7&", "farmer"),
 
-for username, password in users:
+    # Admins
+    ("admin_john_doe", "adminPass1!", "admin"),
+    ("admin_jane_smith", "adminPass2@", "admin"),
+    ("admin_alice_johnson", "adminPass3#", "admin"),
+    ("admin_bob_brown", "adminPass4$", "admin"),
+    ("admin_charlie_davis", "adminPass5%", "admin"),
+    ("admin_david_lee", "adminPass6^", "admin"),
+    ("admin_emily_clark", "adminPass7&", "admin"),
+]
+for username, password, role in users:
     hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-    add_user(username, hashed_password.decode('utf-8'))
-    print(f"User {username} added with hashed password {hashed_password.decode('utf-8')}")
+    add_user(username, hashed_password.decode('utf-8'), role)
+    print(f"User {username} added with hashed password {hashed_password.decode('utf-8')} and role {role}")
