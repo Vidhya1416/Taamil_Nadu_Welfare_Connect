@@ -5,7 +5,11 @@ from utils import set_background
 from database import add_user, get_user
 
 def show_signup(role, root):
+    if role.lower() == "admin":
+        return
+
     from role_selection import open_role_selection
+    from login import show_login  # Ensure this import is correct
 
     def create_account():
         username = username_entry.get()
@@ -37,7 +41,7 @@ def show_signup(role, root):
             root.after(2000, lambda: show_login(role, root))
             return
 
-        add_user(username, password)
+        add_user(username, password, role)
         messagebox.showinfo("Success", f"Account successfully created for {role}")
         root.after(2000, lambda: open_dashboard(role, root))
 
@@ -109,7 +113,3 @@ def show_signup(role, root):
     back_arrow = tk.Label(root, text="←", font=("Helvetica", 24), cursor="hand2", fg="blue", bg="white")
     back_arrow.bind("<Button-1>", lambda e: open_role_selection(root))
     back_arrow.place(x=10, y=10)
-
-def show_login(role, root):
-    from login import show_login
-    show_login(role, root)
