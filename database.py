@@ -4,8 +4,8 @@ import bcrypt
 def create_connection():
     try:
         conn = mysql.connector.connect(
-            host="localhost",  # Just the hostname
-            port=3306,  # Specify the port number separately
+            host="localhost",
+            port=3306,
             user="root",
             password="cute",
             database="user_db"
@@ -16,7 +16,7 @@ def create_connection():
         print(f"Error: {err}")
         return None
 
-def add_user(username, password):
+def add_user(username, password, role):
     conn = create_connection()
     if conn is None:
         print("Failed to connect to the database")
@@ -24,9 +24,10 @@ def add_user(username, password):
     cursor = conn.cursor()
     try:
         hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-        cursor.execute('INSERT INTO users (username, password) VALUES (%s, %s)', (username, hashed_password))
+        print(f"Hashed password for {username}: {hashed_password.decode('utf-8')}")
+        cursor.execute('INSERT INTO users (username, password, role) VALUES (%s, %s, %s)', (username, hashed_password.decode('utf-8'), role))
         conn.commit()
-        print("User added successfully")
+        print(f"User {username} added with role {role}")
     except mysql.connector.Error as err:
         print(f"Error: {err}")
     finally:
@@ -40,9 +41,9 @@ def get_user(username):
         return None
     cursor = conn.cursor()
     try:
-        cursor.execute('SELECT username, password FROM users WHERE username=%s', (username,))
+        cursor.execute('SELECT username, password, role FROM users WHERE username=%s', (username,))
         user = cursor.fetchone()
-        print(f"User retrieved: {user}")  # Debug statement
+        print(f"User retrieved: {user}")
         return user
     except mysql.connector.Error as err:
         print(f"Error: {err}")
@@ -51,17 +52,22 @@ def get_user(username):
         cursor.close()
         conn.close()
 
-# Ensure the table structure matches your requirements
+# Create the users table if it doesn't exist
 conn = create_connection()
 if conn:
     cursor = conn.cursor()
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS users (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            username VARCHAR(255) NOT NULL,
-            password VARCHAR(255) NOT NULL
-        )
-    """)
-    conn.commit()
-    cursor.close()
-    conn.close()
+    try:
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS users (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                username VARCHAR(255) NOT NULL,
+                password VARCHAR(255) NOT NULL,
+                role VARCHAR(50) NOT NULL
+            )
+        """)
+        conn.commit()
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")
+    finally:
+        cursor.close()
+        conn.close()
