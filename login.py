@@ -1,37 +1,34 @@
+# login.py
 import tkinter as tk
 from tkinter import messagebox
-from utils import set_background
-from auth import authenticate  # Correctly import the authenticate function
+from auth import authenticate
 
-def show_login(role, root):
-    def handle_login():
-        username = username_entry.get().strip()
-        password = password_entry.get().strip()
-        print(f"Attempting login with Username: '{username}', Password: '{password}'")
+def handle_login(username_entry, password_entry, error_msg, role, root, on_admin_login_callback):
+    username = username_entry.get().strip()
+    password = password_entry.get().strip()
+    result = authenticate(username, password, role)
+    error_msg.set(result.get("message", "An error occurred."))
 
-        result = authenticate(username, password, role)
-        print(f"Authentication result: {result}")
-
-        error_msg.set(result["message"])
-
-        if result["success"]:
-            messagebox.showinfo("Success", result["message"])
-            open_dashboard(role)
+    if result.get("success"):
+        messagebox.showinfo("Success", result["message"])
+        if role.lower() == "admin":
+            on_admin_login_callback(username)
         else:
-            error_msg.set(result["message"])
+            open_dashboard(role, username, root)
+    else:
+        error_msg.set(result.get("message", "An error occurred."))
 
-    def open_dashboard(role):
-        for widget in root.winfo_children():
-            widget.destroy()
+def open_dashboard(role, username, root):
+    for widget in root.winfo_children():
+        widget.destroy()
 
-        set_background(root)
+    dashboard_label = tk.Label(root, text=f"{role} Dashboard", font=("Helvetica", 20))
+    dashboard_label.pack(pady=20)
 
-        dashboard_label = tk.Label(root, text=f"{role} Dashboard", font=("Helvetica", 20))
-        dashboard_label.pack(pady=20)
+    welcome_message = tk.Label(root, text=f"Welcome, {username}!", font=("Helvetica", 16))
+    welcome_message.pack(pady=10)
 
-        welcome_message = tk.Label(root, text=f"Welcome, {username_entry.get()}!", font=("Helvetica", 16))
-        welcome_message.pack(pady=10)
-
+def show_login(role, root, back_callback, on_admin_login_callback):
     def toggle_password_visibility(entry, button):
         if entry.cget('show') == '':
             entry.config(show='*')
@@ -40,12 +37,8 @@ def show_login(role, root):
             entry.config(show='')
             button.config(text='🙈')
 
-    from role_selection import open_role_selection
-
     for widget in root.winfo_children():
         widget.destroy()
-
-    set_background(root)
 
     container = tk.Frame(root)
     container.pack(expand=True, fill='both')
@@ -76,9 +69,9 @@ def show_login(role, root):
     error_label = tk.Label(center_frame, textvariable=error_msg, fg="red")
     error_label.pack(pady=5)
 
-    login_button = tk.Button(center_frame, text="Login", command=handle_login)
+    login_button = tk.Button(center_frame, text="Login", command=lambda: handle_login(username_entry, password_entry, error_msg, role, root, on_admin_login_callback))
     login_button.pack(pady=20)
 
     back_arrow = tk.Label(root, text="←", font=("Helvetica", 24), cursor="hand2", fg="blue", bg="white")
-    back_arrow.bind("<Button-1>", lambda e: open_role_selection(root))
+    back_arrow.bind("<Button-1>", lambda e: back_callback())
     back_arrow.place(x=10, y=10)
