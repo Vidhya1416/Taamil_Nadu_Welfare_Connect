@@ -1,15 +1,17 @@
 import tkinter as tk
-from role_selection import open_role_selection
-
-def main():
-    global root
-    root = tk.Tk()
-    root.title("Tamil Nadu Welfare Connect")
-    root.geometry("600x400")
-
-    open_role_selection(root)
-
-    root.mainloop()
+from app_controller import AppController
+from database import create_connection  # Import create_connection
 
 if __name__ == "__main__":
-    main()
+    # Create the database connection if it doesn't exist.
+    if create_connection():
+        print("Database connection successful")
+    else:
+        print("Database connection failed")
+        exit()
+
+    root = tk.Tk()
+    root.title("Tamil Nadu Welfare Connect")
+    app = AppController(root)
+    app.show_role_selection()  # Start with role selection
+    root.mainloop()
