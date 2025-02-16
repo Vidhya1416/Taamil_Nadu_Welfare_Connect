@@ -1,34 +1,9 @@
 import tkinter as tk
 from tkinter import messagebox, ttk
 from PIL import Image, ImageTk
-from utils import set_background  # Import set_background from utils
+from utils import set_background
 
-def open_login_signup(role, root):
-    for widget in root.winfo_children():
-        widget.destroy()
-
-    set_background(root)
-
-    tk.Label(root, text=f"{role} Login/Signup", font=("Helvetica", 16)).pack(pady=20)
-
-    from login import show_login  # Import inside function to avoid circular import
-    if role.lower() != "admin":
-        from signup import show_signup  # Import inside function to avoid circular import
-
-    tk.Button(root, text="Login", command=lambda: show_login(role, root)).pack(pady=10)
-
-    if role.lower() != "admin":
-        tk.Button(root, text="Signup", command=lambda: show_signup(role, root)).pack(pady=10)
-
-    tk.Button(root, text="Back to Role Selection", command=lambda: open_role_selection(root)).pack(pady=10)
-
-def animate_button(button):
-    current_color = button.cget("background")
-    next_color = "#FFA07A" if current_color == "#87CEFA" else "#87CEFA"
-    button.config(background=next_color)
-    button.after(500, animate_button, button)
-
-def open_role_selection(root):
+def open_role_selection(root, role_selected_callback):
     for widget in root.winfo_children():
         widget.destroy()
 
@@ -63,12 +38,13 @@ def open_role_selection(root):
             img_label.image = photo
             img_label.pack(pady=10)
 
-            button = tk.Button(inner_frame, text=role, command=lambda: open_login_signup(role, root),
-                               font=("Helvetica", 12),
-                               bg="#87CEFA", activebackground="#FFA07A", relief="solid", bd=2)
+            button = tk.Button(inner_frame, text=role,
+                                command=lambda r=role: role_selected_callback(r),  # CORRECTED LINE!
+                                font=("Helvetica", 12),
+                                bg="#87CEFA", activebackground="#FFA07A", relief="solid", bd=2)
             button.config(borderwidth=2, relief="solid")
             button.pack(pady=10)
-            animate_button(button)
+            # animate_button(button)  # If you have this function, uncomment it
         except FileNotFoundError:
             messagebox.showerror("File Not Found",
                                  f"Image file '{image_path}' not found. Please ensure the file is in the correct directory.")
