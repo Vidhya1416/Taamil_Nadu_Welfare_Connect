@@ -52,6 +52,24 @@ def get_user(username):
         cursor.close()
         conn.close()
 
+def get_all_users():
+    conn = create_connection()
+    if conn is None:
+        print("Failed to connect to the database")
+        return []  # Return an empty list if connection fails
+
+    cursor = conn.cursor()
+    try:
+        cursor.execute("SELECT id, username, role FROM users")  # Select the columns you want
+        users = cursor.fetchall()
+        return users
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")
+        return []  # Return an empty list if there's an error
+    finally:
+        if conn.is_connected():
+            cursor.close()
+            conn.close()
 # Create the users table if it doesn't exist
 conn = create_connection()
 if conn:
