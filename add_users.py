@@ -28,6 +28,7 @@ users = [
     ("admin_david_lee", "adminPass6^", "admin"),
     ("admin_emily_clark", "adminPass7&", "admin"),
 ]
+
 for username, password, role in users:
     hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
     add_user(username, hashed_password.decode('utf-8'), role)
