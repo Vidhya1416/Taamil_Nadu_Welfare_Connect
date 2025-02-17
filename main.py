@@ -12,6 +12,7 @@ if __name__ == "__main__":
 
     root = tk.Tk()
     root.title("Tamil Nadu Welfare Connect")
+    root.geometry("800x600")  # Adjust the window size for better view
     app = AppController(root)
     app.show_role_selection()  # Start with role selection
     root.mainloop()
