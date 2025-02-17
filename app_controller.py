@@ -1,11 +1,11 @@
-# app_controller.py
 import tkinter as tk
 from login_signup_page import show_login_signup
 from role_selection import open_role_selection
-from login import show_login, handle_login, open_dashboard  # Import functions, not classes
+from login import show_login, handle_login, open_dashboard
 from signup import show_signup
 from admin_management import show_admin_management
 from utils import set_background
+from student_dashboard import show_student_dashboard  # Import the student dashboard function
 
 class AppController:
     def __init__(self, root):
@@ -26,4 +26,5 @@ class AppController:
     def show_admin_management(self, username):
         show_admin_management(self.root, lambda: self.show_login("Admin", self.root, self.show_role_selection))
 
-# Ensure this file ends with the definition of the AppController class
+    def show_student_dashboard(self):  # Add this method
+        show_student_dashboard(self.root)
