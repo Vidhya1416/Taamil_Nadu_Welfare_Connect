@@ -5,6 +5,7 @@ from login import show_login, handle_login, open_dashboard
 from signup import show_signup
 from admin_management import show_admin_management
 from student_dashboard import show_student_dashboard
+from farmer_dashboard import show_farmer_dashboard
 
 class AppController:
     def __init__(self, root):
@@ -16,14 +17,17 @@ class AppController:
     def show_login_signup(self, role):
         show_login_signup(role, self.root, self.show_role_selection, self.show_login, self.show_signup)
 
-    def show_login(self, role, root, back_callback):
-        show_login(role, self.root, back_callback, self.show_admin_management, self.show_student_dashboard)
+    def show_login(self, role):
+        show_login(role, self.root, self.show_role_selection, self.show_admin_management, self.show_student_dashboard, self.show_farmer_dashboard)
 
     def show_signup(self, role, root, back_callback):
         show_signup(role, self.root, back_callback)
 
     def show_admin_management(self, username):
-        show_admin_management(self.root, lambda: self.show_login("Admin", self.root, self.show_role_selection))
+        show_admin_management(self.root, lambda: self.show_login("Admin"))
 
     def show_student_dashboard(self, root):
-        show_student_dashboard(self.root, back_callback=lambda: self.show_login("Student", self.root, self.show_role_selection))
+        show_student_dashboard(self.root, back_callback=lambda: self.show_login("Student"))
+
+    def show_farmer_dashboard(self, root):
+        show_farmer_dashboard(self.root, back_callback=lambda: self.show_login("Farmer"))
