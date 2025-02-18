@@ -1,9 +1,8 @@
 import tkinter as tk
 from tkinter import messagebox
 from auth import authenticate
-from student_dashboard import show_student_dashboard  # Import the student dashboard function
 
-def handle_login(username_entry, password_entry, error_msg, role, root, on_admin_login_callback):
+def handle_login(username_entry, password_entry, error_msg, role, root, on_admin_login_callback, on_student_login_callback):
     username = username_entry.get().strip()
     password = password_entry.get().strip()
     result = authenticate(username, password, role)
@@ -14,7 +13,7 @@ def handle_login(username_entry, password_entry, error_msg, role, root, on_admin
         if role.lower() == "admin":
             on_admin_login_callback(username)
         elif role.lower() == "student":
-            show_student_dashboard(root)  # Update this line
+            on_student_login_callback(root)
         else:
             open_dashboard(role, username, root)
     else:
@@ -24,15 +23,14 @@ def open_dashboard(role, username, root):
     for widget in root.winfo_children():
         widget.destroy()
 
-    root.configure(bg="#FFDEAD")  # Set the background color to navajo white
-
+    root.configure(bg="#FFDEAD")
     dashboard_label = tk.Label(root, text=f"{role} Dashboard", font=("Helvetica", 20), bg="#FFDEAD")
     dashboard_label.pack(pady=20)
 
     welcome_message = tk.Label(root, text=f"Welcome, {username}!", font=("Helvetica", 16), bg="#FFDEAD")
     welcome_message.pack(pady=10)
 
-def show_login(role, root, back_callback, on_admin_login_callback):
+def show_login(role, root, back_callback, on_admin_login_callback, on_student_login_callback):
     def toggle_password_visibility(entry, button):
         if entry.cget('show') == '':
             entry.config(show='*')
@@ -44,8 +42,7 @@ def show_login(role, root, back_callback, on_admin_login_callback):
     for widget in root.winfo_children():
         widget.destroy()
 
-    root.configure(bg="#FFDEAD")  # Set the background color to navajo white
-
+    root.configure(bg="#FFDEAD")
     container = tk.Frame(root, bg="#FFDEAD")
     container.pack(expand=True, fill='both')
 
@@ -75,7 +72,7 @@ def show_login(role, root, back_callback, on_admin_login_callback):
     error_label = tk.Label(center_frame, textvariable=error_msg, fg="red", bg="#FFDEAD")
     error_label.pack(pady=5)
 
-    login_button = tk.Button(center_frame, text="Login", command=lambda: handle_login(username_entry, password_entry, error_msg, role, root, on_admin_login_callback))
+    login_button = tk.Button(center_frame, text="Login", command=lambda: handle_login(username_entry, password_entry, error_msg, role, root, on_admin_login_callback, on_student_login_callback))
     login_button.pack(pady=20)
 
     back_arrow = tk.Label(root, text="←", font=("Helvetica", 24), cursor="hand2", fg="blue", bg="#FFDEAD")
