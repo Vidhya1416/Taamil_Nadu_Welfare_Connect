@@ -1,8 +1,9 @@
 import tkinter as tk
 from tkinter import messagebox
 from auth import authenticate
+from farmer_dashboard import show_farmer_dashboard
 
-def handle_login(username_entry, password_entry, error_msg, role, root, on_admin_login_callback, on_student_login_callback):
+def handle_login(username_entry, password_entry, error_msg, role, root, on_admin_login_callback, on_student_login_callback, on_farmer_login_callback):
     username = username_entry.get().strip()
     password = password_entry.get().strip()
     result = authenticate(username, password, role)
@@ -14,6 +15,8 @@ def handle_login(username_entry, password_entry, error_msg, role, root, on_admin
             on_admin_login_callback(username)
         elif role.lower() == "student":
             on_student_login_callback(root)
+        elif role.lower() == "farmer":
+            on_farmer_login_callback(root)
         else:
             open_dashboard(role, username, root)
     else:
@@ -30,7 +33,7 @@ def open_dashboard(role, username, root):
     welcome_message = tk.Label(root, text=f"Welcome, {username}!", font=("Helvetica", 16), bg="#FFDEAD")
     welcome_message.pack(pady=10)
 
-def show_login(role, root, back_callback, on_admin_login_callback, on_student_login_callback):
+def show_login(role, root, back_callback, on_admin_login_callback, on_student_login_callback, on_farmer_login_callback):
     def toggle_password_visibility(entry, button):
         if entry.cget('show') == '':
             entry.config(show='*')
@@ -72,7 +75,7 @@ def show_login(role, root, back_callback, on_admin_login_callback, on_student_lo
     error_label = tk.Label(center_frame, textvariable=error_msg, fg="red", bg="#FFDEAD")
     error_label.pack(pady=5)
 
-    login_button = tk.Button(center_frame, text="Login", command=lambda: handle_login(username_entry, password_entry, error_msg, role, root, on_admin_login_callback, on_student_login_callback))
+    login_button = tk.Button(center_frame, text="Login", command=lambda: handle_login(username_entry, password_entry, error_msg, role, root, on_admin_login_callback, on_student_login_callback, on_farmer_login_callback))
     login_button.pack(pady=20)
 
     back_arrow = tk.Label(root, text="←", font=("Helvetica", 24), cursor="hand2", fg="blue", bg="#FFDEAD")
