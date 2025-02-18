@@ -1,4 +1,3 @@
-# admin_management.py
 import tkinter as tk
 from tkinter import ttk
 from utils import set_background
@@ -23,23 +22,19 @@ def show_admin_management(root, back_callback):
 
         set_background(root)
 
-        back_arrow = tk.Label(root, text="←", font=("Helvetica", 24), cursor="hand2", fg="blue", bg="white")
-        back_arrow.bind("<Button-1>", lambda e: show_admin_management(root, back_callback))
-        back_arrow.place(x=10, y=10)
+        back_button = tk.Button(root, text="Back", command=lambda: show_admin_management(root, back_callback), bg="#cc4125", fg="white")
+        back_button.pack(pady=10)
 
         title_label = tk.Label(root, text="User Data Management", font=("Helvetica", 20), bg="white")
         title_label.pack(pady=20)
 
-        # Create Treeview widget
         tree = ttk.Treeview(root, columns=("ID", "Username", "Role"), show="headings")
         tree.heading("ID", text="ID")
         tree.heading("Username", text="Username")
         tree.heading("Role", text="Role")
 
-        # Fetch user data from the database
         users = get_all_users()
 
-        # Insert data into the Treeview
         for user in users:
             tree.insert("", tk.END, values=user)
 
@@ -51,9 +46,8 @@ def show_admin_management(root, back_callback):
 
         set_background(root)
 
-        back_arrow = tk.Label(root, text="←", font=("Helvetica", 24), cursor="hand2", fg="blue", bg="white")
-        back_arrow.bind("<Button-1>", lambda e: show_admin_management(root, back_callback))
-        back_arrow.place(x=10, y=10)
+        back_button = tk.Button(root, text="Back", command=lambda: show_admin_management(root, back_callback), bg="#cc4125", fg="white")
+        back_button.pack(pady=10)
 
         title_label = tk.Label(root, text="Transaction Process", font=("Helvetica", 20), bg="white")
         title_label.pack(pady=20)
@@ -66,9 +60,8 @@ def show_admin_management(root, back_callback):
 
         set_background(root)
 
-        back_arrow = tk.Label(root, text="←", font=("Helvetica", 24), cursor="hand2", fg="blue", bg="white")
-        back_arrow.bind("<Button-1>", lambda e: show_admin_management(root, back_callback))
-        back_arrow.place(x=10, y=10)
+        back_button = tk.Button(root, text="Back", command=lambda: show_admin_management(root, back_callback), bg="#cc4125", fg="white")
+        back_button.pack(pady=10)
 
         title_label = tk.Label(root, text="Report Details", font=("Helvetica", 20), bg="white")
         title_label.pack(pady=20)
@@ -81,9 +74,8 @@ def show_admin_management(root, back_callback):
 
         set_background(root)
 
-        back_arrow = tk.Label(root, text="←", font=("Helvetica", 24), cursor="hand2", fg="blue", bg="white")
-        back_arrow.bind("<Button-1>", lambda e: show_admin_management(root, back_callback))
-        back_arrow.place(x=10, y=10)
+        back_button = tk.Button(root, text="Back", command=lambda: show_admin_management(root, back_callback), bg="#cc4125", fg="white")
+        back_button.pack(pady=10)
 
         title_label = tk.Label(root, text="Transaction Issue Details", font=("Helvetica", 20), bg="white")
         title_label.pack(pady=20)
