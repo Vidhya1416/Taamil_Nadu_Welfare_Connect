@@ -18,7 +18,6 @@ users = [
     ("farmer_charlie_davis", "farmerPass5%", "farmer"),
     ("farmer_david_lee", "farmerPass6^", "farmer"),
     ("farmer_emily_clark", "farmerPass7&", "farmer"),
-
     # Admins
     ("admin_john_doe", "adminPass1!", "admin"),
     ("admin_jane_smith", "adminPass2@", "admin"),
