@@ -5,6 +5,9 @@ from utils import set_background
 from database import add_user, get_user
 from login import show_login
 from role_selection import open_role_selection
+from admin_management import show_admin_management
+from student_dashboard import show_student_dashboard
+from farmer_dashboard import show_farmer_dashboard
 
 def create_account(username_entry, password_entry, confirm_password_entry, error_msg, role, root):
     username = username_entry.get()
@@ -32,7 +35,7 @@ def create_account(username_entry, password_entry, confirm_password_entry, error
     existing_user = get_user(username)
     if existing_user:
         error_msg.set("Account already exists. Redirecting to login.")
-        root.after(2000, lambda: show_login(role, root, open_role_selection, lambda: show_login(role, root, open_role_selection)))  # Correct this line
+        root.after(2000, lambda: show_login(role, root, open_role_selection, show_admin_management, show_student_dashboard, show_farmer_dashboard))
         return
 
     add_user(username, password, role)
@@ -63,7 +66,7 @@ def show_signup(role, root, back_callback):
     for widget in root.winfo_children():
         widget.destroy()
 
-    root.configure(bg="#ADD8E6")  # Set the background color to light blue
+    set_background(root)  # Set the background image
 
     container = tk.Frame(root, bg="#ADD8E6")
     container.pack(expand=True, fill='both')
