@@ -39,12 +39,11 @@ def open_role_selection(root, role_selected_callback):
             img_label.pack(pady=10)
 
             button = tk.Button(inner_frame, text=role,
-                                command=lambda r=role: role_selected_callback(r),  # CORRECTED LINE!
+                                command=lambda r=role: role_selected_callback(r),
                                 font=("Helvetica", 12),
                                 bg="#87CEFA", activebackground="#FFA07A", relief="solid", bd=2)
             button.config(borderwidth=2, relief="solid")
             button.pack(pady=10)
-            # animate_button(button)  # If you have this function, uncomment it
         except FileNotFoundError:
             messagebox.showerror("File Not Found",
                                  f"Image file '{image_path}' not found. Please ensure the file is in the correct directory.")
